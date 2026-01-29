@@ -34,17 +34,29 @@
    npm install -g @builder.io/ai-shell
    ```
 
-2. Retrieve your API key from [OpenAI](https://platform.openai.com/account/api-keys)
+2. Configure your preferred provider:
 
-   > Note: If you haven't already, you'll have to create an account and set up billing.
-
-3. Set the key so ai-shell can use it:
-
-   ```sh
-   ai config set OPENAI_KEY=<your token>
+   ### Gemini (Default)
+   Get your key from [Google AI Studio](https://makersuite.google.com/app/apikey).
+   ```bash
+   ai config set PROVIDER=gemini
+   ai config set GEMINI_KEY=<your token>
    ```
 
-   This will create a `.ai-shell` file in your home directory.
+   ### Ollama (Local)
+   Install and run [Ollama](https://ollama.ai/).
+   ```bash
+   ai config set PROVIDER=ollama
+   # Optional: Set custom host (default: http://localhost:11434)
+   ai config set OLLAMA_HOST=http://localhost:11434
+   ```
+
+   ### OpenAI (Legacy)
+   Get your key from [OpenAI](https://platform.openai.com/account/api-keys).
+   ```bash
+   ai config set PROVIDER=openai
+   ai config set OPENAI_KEY=<your token>
+   ```
 
 ## Usage
 
@@ -75,6 +87,24 @@ Then you will get an output like this, where you can choose to run the suggested
 │  ○ ❌ Cancel
 └
 ```
+
+### Config Commands
+
+Switch providers easily:
+```bash
+ai config set PROVIDER=gemini
+```
+
+Set custom endpoints:
+```bash
+ai config set OPENAI_API_ENDPOINT=<your endpoint>
+```
+
+Enable silent mode (skip explanations):
+```bash
+ai config set SILENT_MODE=true
+```
+
 
 ### Special characters
 

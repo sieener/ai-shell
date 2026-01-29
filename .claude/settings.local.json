@@ -2,7 +2,32 @@
   "permissions": {
     "allow": [
       "Bash(wc:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(.specify/scripts/bash/setup-plan.sh:*)",
+      "Bash(git branch:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:ollama.ai)",
+      "WebFetch(domain:ai.google.dev)",
+      "WebFetch(domain:ollama.com)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(.specify/scripts/bash/update-agent-context.sh:*)",
+      "Bash(echo:*)",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh:*)"
     ]
+  },
+  "enabledPlugins": {
+    "everything-claude-code@everything-claude-code": true
+  },
+  "_comments": {
+    "colors": {
+      "B": "Blue - directory path",
+      "G": "Green - git branch",
+      "Y": "Yellow - dirty status, time",
+      "M": "Magenta - context remaining",
+      "C": "Cyan - username, todos",
+      "T": "Gray - model name"
+    }
   }
 }

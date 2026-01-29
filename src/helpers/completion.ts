@@ -1,6 +1,4 @@
 import {
-  OpenAIApi,
-  Configuration,
   ChatCompletionRequestMessage,
   Model,
 } from 'openai';
@@ -15,15 +13,10 @@ import './replace-all-polyfill';
 import i18n from './i18n';
 import { stripRegexPatterns } from './strip-regex-patterns';
 import readline from 'readline';
+import { createProvider } from './providers/index';
+import { getConfig } from './config';
 
 const explainInSecondRequest = true;
-
-function getOpenAi(key: string, apiEndpoint: string) {
-  const openAi = new OpenAIApi(
-    new Configuration({ apiKey: key, basePath: apiEndpoint })
-  );
-  return openAi;
-}
 
 // Openai outputs markdown format for code blocks. It oftne uses
 // a github style like: "```bash"
@@ -68,70 +61,75 @@ export async function generateCompletion({
   key: string;
   apiEndpoint: string;
 }) {
-  const openAi = getOpenAi(key, apiEndpoint);
-  try {
-    const completion = await openAi.createChatCompletion(
-      {
-        model: model || 'gpt-4o-mini',
-        messages: Array.isArray(prompt)
-          ? prompt
-          : [{ role: 'user', content: prompt }],
-        n: Math.min(number, 10),
-        stream: true,
-      },
-      { responseType: 'stream' }
-    );
+  const config = await getConfig();
+  const providerName = config.PROVIDER || 'openai'; // Fallback to openai if undefined (though config defaults to gemini now, existing might vary)
+  
+  // If the provider is NOT openai, we need to ensure we have the correct key.
+  // The 'key' argument passed to this function is typically OPENAI_KEY from the CLI or config.
+  // If we are using Gemini, we need GEMINI_KEY.
+  // If we are using Ollama, we don't need a key.
+  
+  let apiKey = key;
+  if (providerName === 'gemini') {
+    apiKey = config.GEMINI_KEY || '';
+  } else if (providerName === 'ollama') {
+    apiKey = ''; // No key needed usually
+  }
 
-    return completion.data as unknown as IncomingMessage;
+  const provider = createProvider(providerName);
+
+  // FR-011: Warn and fallback if configured MODEL is incompatible with selected PROVIDER
+  if (model) {
+    const isOpenAIModel = model.startsWith('gpt-') || model.startsWith('text-');
+    const isGeminiModel = model.startsWith('gemini-');
+    
+    if (providerName === 'gemini' && isOpenAIModel) {
+      console.warn(`\n${i18n.t('Warning')}: Model '${model}' seems incompatible with Gemini. Using default.\n`);
+      model = undefined;
+    } else if (providerName === 'openai' && isGeminiModel) {
+       console.warn(`\n${i18n.t('Warning')}: Model '${model}' seems incompatible with OpenAI. Using default.\n`);
+       model = undefined;
+    }
+  }
+
+  // Convert ChatCompletionRequestMessage[] to string if necessary
+  // Our new interface takes a string prompt.
+  // OpenAI chat completion takes messages.
+  // If prompt is array, we convert to text for non-chat providers or let the provider handle it?
+  // The interface `generateCompletion(prompt: string, ...)` expects string.
+  
+  let promptText = '';
+  if (Array.isArray(prompt)) {
+    promptText = prompt.map(m => `${m.role}: ${m.content}`).join('\n');
+  } else {
+    promptText = prompt;
+  }
+
+  try {
+    return await provider.generateCompletion(promptText, {
+      apiKey,
+      model,
+      endpoint: apiEndpoint // Note: This might be OPENAI specific endpoint. Providers should ignore if not relevant or handle accordingly.
+    });
   } catch (err) {
-    const error = err as AxiosError;
+    const error = err as any;
 
     if (error.code === 'ENOTFOUND') {
       throw new KnownError(
-        `Error connecting to ${error.request.hostname} (${error.request.syscall}). Are you connected to the internet?`
+        `Error connecting to ${error.request?.hostname || 'provider'} (${error.request?.syscall || 'unknown'}). Are you connected to the internet?`
       );
     }
-
-    const response = error.response;
-    let message = response?.data as string | object | IncomingMessage;
-    if (response && message instanceof IncomingMessage) {
-      message = await streamToString(
-        response.data as unknown as IncomingMessage
-      );
-      try {
-        // Handle if the message is JSON. It should be but occasionally will
-        // be HTML, so lets handle both
-        message = JSON.parse(message);
-      } catch (e) {
-        // Ignore
-      }
+    
+    // Pass through KnownErrors
+    if (error instanceof KnownError) {
+      throw error;
     }
 
-    const messageString = message && JSON.stringify(message, null, 2);
-    if (response?.status === 429) {
-      throw new KnownError(
-        dedent`
-        Request to OpenAI failed with status 429. This is due to incorrect billing setup or excessive quota usage. Please follow this guide to fix it: https://help.openai.com/en/articles/6891831-error-code-429-you-exceeded-your-current-quota-please-check-your-plan-and-billing-details
-
-        You can activate billing here: https://platform.openai.com/account/billing/overview . Make sure to add a payment method if not under an active grant from OpenAI.
-
-        Full message from OpenAI:
-      ` +
-          '\n\n' +
-          messageString +
-          '\n'
-      );
-    } else if (response && message) {
-      throw new KnownError(
-        dedent`
-        Request to OpenAI failed with status ${response?.status}:
-      ` +
-          '\n\n' +
-          messageString +
-          '\n'
-      );
-    }
-
+    // Re-throw other errors for now, or adapt the specific OpenAI error handling below if generic enough
+    // The original code had specific handling for OpenAI 429 and response parsing.
+    // We should probably move that logic INTO the OpenAI provider implementation
+    // and just re-throw here.
+    
     throw error;
   }
 }
@@ -217,6 +215,15 @@ export const readData =
         const payloads = chunk.toString().split('\n\n');
         for (const payload of payloads) {
           if (payload.includes('[DONE]') || stopTextStream) {
+            // Flush any remaining buffered content before resolving
+            if (buffer && !dataStart) {
+              const bufferedContentWithoutExcluded = stripRegexPatterns(
+                buffer,
+                excluded
+              );
+              data += bufferedContentWithoutExcluded;
+              writer(bufferedContentWithoutExcluded);
+            }
             dataStart = false;
             resolve(data);
             return;
@@ -233,6 +240,18 @@ export const readData =
                 // Clear the buffer once it has served its purpose
                 buffer = '';
                 if (excludedPrefix) break;
+              } else if (excludedPrefix && buffer.length > 50) {
+                // If we've accumulated content but no code block marker found,
+                // assume the response doesn't have code blocks and start displaying
+                dataStart = true;
+                // Write the buffered content first
+                const bufferedContentWithoutExcluded = stripRegexPatterns(
+                  buffer,
+                  excluded
+                );
+                data += bufferedContentWithoutExcluded;
+                writer(bufferedContentWithoutExcluded);
+                buffer = '';
               }
             }
 
@@ -257,6 +276,16 @@ export const readData =
         } catch (error) {
           return `Error with JSON.parse and ${payload}.\n${error}`;
         }
+      }
+
+      // Flush any remaining buffered content before final resolve
+      if (buffer && !dataStart) {
+        const bufferedContentWithoutExcluded = stripRegexPatterns(
+          buffer,
+          excluded
+        );
+        data += bufferedContentWithoutExcluded;
+        writer(bufferedContentWithoutExcluded);
       }
 
       resolve(data);
