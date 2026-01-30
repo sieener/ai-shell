@@ -94,3 +94,10 @@ DEBUG=false
 - Never commit to main directly
 - PRs require review
 - All tests must pass before merge
+
+## Active Technologies
+- TypeScript 4.9.5, Node.js 18+ + axios 1.3.5 (HTTP), vitest 3.2.4 (testing), ini 4.0.0 (config) (002-ollama-polish)
+- INI file at ~/.ai-shell (config persistence) (002-ollama-polish)
+
+## Recent Changes
+- 002-ollama-polish: Added TypeScript 4.9.5, Node.js 18+ + axios 1.3.5 (HTTP), vitest 3.2.4 (testing), ini 4.0.0 (config)

@@ -16,7 +16,15 @@
       "Bash(echo:*)",
       "Bash(.specify/scripts/bash/check-prerequisites.sh:*)",
       "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell log --oneline -10)",
-      "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell diff HEAD~1 --stat)"
+      "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell diff HEAD~1 --stat)",
+      "Skill(speckit.specify)",
+      "Bash(git fetch:*)",
+      "Bash(ls:*)",
+      "Bash(/Users/jason/Developer/z-ex/ai/tools/ai-shell/.specify/scripts/bash/create-new-feature.sh:*)",
+      "Bash(/Users/jason/Developer/z-ex/ai/tools/ai-shell/.specify/scripts/bash/check-prerequisites.sh:*)",
+      "Bash(/Users/jason/Developer/z-ex/ai/tools/ai-shell/.specify/scripts/bash/setup-plan.sh:*)",
+      "Bash(/Users/jason/Developer/z-ex/ai/tools/ai-shell/.specify/scripts/bash/update-agent-context.sh:*)",
+      "Bash(git rev-parse:*)"
     ]
   },
   "enabledPlugins": {
