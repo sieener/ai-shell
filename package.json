@@ -4,7 +4,6 @@
   "version": "1.0.12",
   "type": "module",
   "dependencies": {
-    "@clack/core": "latest",
     "@clack/prompts": "latest",
     "@dqbd/tiktoken": "^1.0.2",
     "@google/generative-ai": "^0.24.1",

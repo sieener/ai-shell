@@ -8,7 +8,6 @@ import {
 } from './helpers/completion';
 import { getConfig } from './helpers/config';
 import { projectName } from './helpers/constants';
-import { KnownError } from './helpers/error';
 import clipboardy from 'clipboardy';
 import i18n from './helpers/i18n';
 import { appendToShellHistory } from './helpers/shell-history';
@@ -263,11 +262,3 @@ async function revisionFlow(
 
   await runOrReviseFlow(script, key, model, apiEndpoint, silentMode);
 }
-
-export const parseAssert = (name: string, condition: any, message: string) => {
-  if (!condition) {
-    throw new KnownError(
-      `${i18n.t('Invalid config property')} ${name}: ${message}`
-    );
-  }
-};
