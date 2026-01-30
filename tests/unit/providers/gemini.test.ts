@@ -71,7 +71,7 @@ describe('GeminiProvider', () => {
     
     await provider.generateCompletion('test', { apiKey: 'key' });
     
-    // Verify default model 'gemini-3-pro-preview' was used
-    expect(mockGetGenerativeModel).toHaveBeenCalledWith({ model: 'gemini-3-pro-preview' });
+    // Verify default model 'gemini-3-flash-preview' was used
+    expect(mockGetGenerativeModel).toHaveBeenCalledWith({ model: 'gemini-3-flash-preview' });
   });
 });

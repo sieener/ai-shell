@@ -26,7 +26,7 @@
 
 ## Setup
 
-> The minimum supported version of Node.js is v14
+> The minimum supported version of Node.js is v18
 
 1. Install _ai shell_:
 
@@ -187,6 +187,8 @@ The AI Shell's default language is English, but you can easily switch to your pr
 | Arabic              | ar      |
 | Portuguese          | pt      |
 | Turkish             | tr      |
+| Indonesian          | id      |
+| Italian             | it      |
 
 For instance, if you want to switch to Simplified Chinese, you can do so by setting the LANGUAGE value to zh-Hans:
 
@@ -208,10 +210,13 @@ To get an interactive UI like below:
 
 ```bash
 ◆  Set config:
+│  ○ Provider (gemini)
+│  ○ Gemini Key
 │  ○ OpenAI Key
+│  ○ Ollama Host
 │  ○ OpenAI API Endpoint
 │  ○ Silent Mode
-│  ● Model (gpt-4o-mini)
+│  ○ Model
 │  ○ Language
 │  ○ Cancel
 └

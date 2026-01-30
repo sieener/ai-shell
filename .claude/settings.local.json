@@ -14,7 +14,9 @@
       "mcp__context7__query-docs",
       "Bash(.specify/scripts/bash/update-agent-context.sh:*)",
       "Bash(echo:*)",
-      "Bash(.specify/scripts/bash/check-prerequisites.sh:*)"
+      "Bash(.specify/scripts/bash/check-prerequisites.sh:*)",
+      "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell log --oneline -10)",
+      "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell diff HEAD~1 --stat)"
     ]
   },
   "enabledPlugins": {
