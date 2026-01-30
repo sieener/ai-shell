@@ -28,6 +28,18 @@ const parseAssert = (name: string, condition: any, message: string) => {
   }
 };
 
+/**
+ * Validates that a string is a valid Ollama host URL (http or https)
+ */
+export const isValidOllamaHost = (host: string): boolean => {
+  try {
+    const url = new URL(host);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
+  }
+};
+
 const configParsers = {
   OPENAI_KEY(key?: string) {
     return key;
@@ -64,7 +76,16 @@ const configParsers = {
     return key;
   },
   OLLAMA_HOST(host?: string) {
-    return host || 'http://localhost:11434';
+    if (!host) {
+      return 'http://localhost:11434';
+    }
+    // Validate URL format
+    if (!isValidOllamaHost(host)) {
+      throw new KnownError(
+        `${i18n.t('Invalid Ollama host URL')}: ${host}. ${i18n.t('Must be a valid http:// or https:// URL')}`
+      );
+    }
+    return host;
   },
 } as const;
 

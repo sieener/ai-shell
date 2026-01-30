@@ -38,11 +38,11 @@
 
 **WARNING**: User story validation depends on this phase completing first
 
-- [ ] T006 Add 10-second timeout configuration to axios requests in src/helpers/providers/ollama.ts
-- [ ] T007 [P] Add i18n error message keys for Ollama errors in src/helpers/i18n.ts (error.ollama.unreachable, error.ollama.timeout, error.ollama.model_not_found, error.ollama.invalid_host)
-- [ ] T008 [P] Add OLLAMA_HOST URL validation function using native URL constructor in src/helpers/config.ts
-- [ ] T009 Implement connection error handling with user-friendly messages in src/helpers/providers/ollama.ts
-- [ ] T010 Implement timeout error handling with user-friendly messages in src/helpers/providers/ollama.ts
+- [x] T006 Add 10-second timeout configuration to axios requests in src/helpers/providers/ollama.ts
+- [x] T007 [P] Add i18n error message keys for Ollama errors in src/helpers/i18n.ts (error.ollama.unreachable, error.ollama.timeout, error.ollama.model_not_found, error.ollama.invalid_host)
+- [x] T008 [P] Add OLLAMA_HOST URL validation function using native URL constructor in src/helpers/config.ts
+- [x] T009 Implement connection error handling with user-friendly messages in src/helpers/providers/ollama.ts
+- [x] T010 Implement timeout error handling with user-friendly messages in src/helpers/providers/ollama.ts
 
 **Checkpoint**: Foundation ready - timeout handling and error messages in place
 
@@ -58,16 +58,16 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation changes**
 
-- [ ] T011 [P] [US1] Unit test for generateCompletion with successful streaming in tests/unit/providers/ollama.test.ts
-- [ ] T012 [P] [US1] Unit test for ndjson to SSE format conversion in tests/unit/providers/ollama.test.ts
-- [ ] T013 [P] [US1] Unit test for default model (qwen2.5-coder:14b) usage in tests/unit/providers/ollama.test.ts
-- [ ] T014 [US1] Integration test for command generation using recorded fixtures in tests/integration/ollama-e2e.test.ts
+- [x] T011 [P] [US1] Unit test for generateCompletion with successful streaming in tests/unit/providers/ollama.test.ts
+- [x] T012 [P] [US1] Unit test for ndjson to SSE format conversion in tests/unit/providers/ollama.test.ts
+- [x] T013 [P] [US1] Unit test for default model (qwen2.5-coder:14b) usage in tests/unit/providers/ollama.test.ts
+- [x] T014 [US1] Integration test for command generation using recorded fixtures in tests/integration/ollama-e2e.test.ts
 
 ### Implementation for User Story 1
 
-- [ ] T015 [US1] Verify streaming response format conversion in src/helpers/providers/ollama.ts matches SSE spec
-- [ ] T016 [US1] Add empty response handling in src/helpers/providers/ollama.ts (edge case)
-- [ ] T017 [US1] Verify default model constant qwen2.5-coder:14b in src/helpers/providers/ollama.ts
+- [x] T015 [US1] Verify streaming response format conversion in src/helpers/providers/ollama.ts matches SSE spec
+- [x] T016 [US1] Add empty response handling in src/helpers/providers/ollama.ts (edge case)
+- [x] T017 [US1] Verify default model constant qwen2.5-coder:14b in src/helpers/providers/ollama.ts
 
 **Checkpoint**: User Story 1 complete - basic command generation works with Ollama
 
@@ -81,17 +81,17 @@
 
 ### Tests for User Story 2
 
-- [ ] T018 [P] [US2] Unit test for connection refused error handling in tests/unit/providers/ollama.test.ts
-- [ ] T019 [P] [US2] Unit test for timeout error handling (10s) in tests/unit/providers/ollama.test.ts
-- [ ] T020 [P] [US2] Unit test for model not found warning in tests/unit/providers/ollama.test.ts
-- [ ] T021 [US2] Integration test for error scenarios using error fixtures in tests/integration/ollama-e2e.test.ts
+- [x] T018 [P] [US2] Unit test for connection refused error handling in tests/unit/providers/ollama.test.ts
+- [x] T019 [P] [US2] Unit test for timeout error handling (10s) in tests/unit/providers/ollama.test.ts
+- [x] T020 [P] [US2] Unit test for model not found warning in tests/unit/providers/ollama.test.ts
+- [x] T021 [US2] Integration test for error scenarios using error fixtures in tests/integration/ollama-e2e.test.ts
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Implement ECONNREFUSED error handler with i18n message in src/helpers/providers/ollama.ts
-- [ ] T023 [US2] Implement ETIMEDOUT error handler with i18n message in src/helpers/providers/ollama.ts
-- [ ] T024 [US2] Improve model not found warning with actionable message (ollama pull command) in src/helpers/providers/ollama.ts
-- [ ] T025 [US2] Implement stream interruption recovery in src/helpers/providers/ollama.ts
+- [x] T022 [US2] Implement ECONNREFUSED error handler with i18n message in src/helpers/providers/ollama.ts
+- [x] T023 [US2] Implement ETIMEDOUT error handler with i18n message in src/helpers/providers/ollama.ts
+- [x] T024 [US2] Improve model not found warning with actionable message (ollama pull command) in src/helpers/providers/ollama.ts
+- [x] T025 [US2] Implement stream interruption recovery in src/helpers/providers/ollama.ts
 
 **Checkpoint**: User Story 2 complete - all error scenarios display actionable guidance
 
@@ -105,15 +105,15 @@
 
 ### Tests for User Story 3
 
-- [ ] T026 [P] [US3] Unit test for OLLAMA_HOST validation (valid/invalid URLs) in tests/unit/config.test.ts
-- [ ] T027 [P] [US3] Unit test for OLLAMA_HOST persistence and retrieval in tests/unit/config.test.ts
-- [ ] T028 [US3] Unit test for config UI prompting for OLLAMA_HOST when Ollama selected in tests/unit/config.test.ts
+- [x] T026 [P] [US3] Unit test for OLLAMA_HOST validation (valid/invalid URLs) in tests/unit/config.test.ts
+- [x] T027 [P] [US3] Unit test for OLLAMA_HOST persistence and retrieval in tests/unit/config.test.ts
+- [x] T028 [US3] Unit test for config UI prompting for OLLAMA_HOST when Ollama selected in tests/unit/config.test.ts
 
 ### Implementation for User Story 3
 
-- [ ] T029 [US3] Add OLLAMA_HOST validation before storing in src/helpers/config.ts
-- [ ] T030 [US3] Add OLLAMA_HOST input to interactive config UI in src/helpers/config.ts (showConfigUI)
-- [ ] T031 [US3] Verify OLLAMA_HOST is used by OllamaProvider from config in src/helpers/completion.ts
+- [x] T029 [US3] Add OLLAMA_HOST validation before storing in src/helpers/config.ts
+- [x] T030 [US3] Add OLLAMA_HOST input to interactive config UI in src/helpers/config.ts (showConfigUI)
+- [x] T031 [US3] Verify OLLAMA_HOST is used by OllamaProvider from config in src/helpers/completion.ts
 
 **Checkpoint**: User Story 3 complete - configuration changes persist and are used
 
@@ -127,13 +127,13 @@
 
 ### Tests for User Story 4
 
-- [ ] T032 [P] [US4] Integration test for chat mode with Ollama in tests/integration/ollama-e2e.test.ts
-- [ ] T033 [US4] Create chat-session.json fixture with multi-turn conversation in tests/fixtures/ollama/chat-session.json
+- [x] T032 [P] [US4] Integration test for chat mode with Ollama in tests/integration/ollama-e2e.test.ts
+- [x] T033 [US4] Create chat-session.json fixture with multi-turn conversation in tests/fixtures/ollama/chat-session.json
 
 ### Implementation for User Story 4
 
-- [ ] T034 [US4] Verify chat command uses OllamaProvider correctly in src/commands/chat.ts
-- [ ] T035 [US4] Verify message history is passed to Ollama API in src/helpers/providers/ollama.ts
+- [x] T034 [US4] Verify chat command uses OllamaProvider correctly in src/commands/chat.ts
+- [x] T035 [US4] Verify message history is passed to Ollama API in src/helpers/providers/ollama.ts
 
 **Checkpoint**: User Story 4 complete - chat mode maintains context across turns
 
@@ -143,12 +143,12 @@
 
 **Purpose**: Coverage verification, edge cases, and documentation
 
-- [ ] T036 [P] Run test coverage report and verify 80% coverage for ollama.ts
-- [ ] T037 [P] Run test coverage report and verify 80% coverage for config.ts (OLLAMA_HOST parts)
-- [ ] T038 [P] Add test for model name with special characters (e.g., qwen2.5-coder:14b-instruct-q4_K_M) in tests/unit/providers/ollama.test.ts
-- [ ] T039 [P] Add test for extremely long response handling in tests/unit/providers/ollama.test.ts
-- [ ] T040 Update quickstart.md with actual test commands and verification steps in specs/002-ollama-polish/quickstart.md
-- [ ] T041 Run all tests and verify green build
+- [x] T036 [P] Run test coverage report and verify 80% coverage for ollama.ts (achieved: 86.01%)
+- [x] T037 [P] Run test coverage report and verify 80% coverage for config.ts (OLLAMA_HOST parts) (achieved: validation at 97.43% branch coverage)
+- [x] T038 [P] Add test for model name with special characters (e.g., qwen2.5-coder:14b-instruct-q4_K_M) in tests/unit/providers/ollama.test.ts
+- [x] T039 [P] Add test for extremely long response handling in tests/unit/providers/ollama.test.ts
+- [x] T040 Update quickstart.md with actual test commands and verification steps in specs/002-ollama-polish/quickstart.md
+- [x] T041 Run all tests and verify green build (64 tests passing)
 
 ---
 

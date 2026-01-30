@@ -95,3 +95,4 @@ tests/
 ## Complexity Tracking
 
 No constitution violations requiring justification.
+    

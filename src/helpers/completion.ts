@@ -70,10 +70,13 @@ export async function generateCompletion({
   // If we are using Ollama, we don't need a key.
   
   let apiKey = key;
+  let endpoint = apiEndpoint;
+
   if (providerName === 'gemini') {
     apiKey = config.GEMINI_KEY || '';
   } else if (providerName === 'ollama') {
     apiKey = ''; // No key needed usually
+    endpoint = config.OLLAMA_HOST || 'http://localhost:11434';
   }
 
   const provider = createProvider(providerName);
@@ -109,7 +112,7 @@ export async function generateCompletion({
     return await provider.generateCompletion(promptText, {
       apiKey,
       model,
-      endpoint: apiEndpoint // Note: This might be OPENAI specific endpoint. Providers should ignore if not relevant or handle accordingly.
+      endpoint, // Use provider-specific endpoint (OLLAMA_HOST for Ollama, OPENAI_API_ENDPOINT for OpenAI)
     });
   } catch (err) {
     const error = err as any;

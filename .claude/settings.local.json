@@ -24,7 +24,12 @@
       "Bash(/Users/jason/Developer/z-ex/ai/tools/ai-shell/.specify/scripts/bash/check-prerequisites.sh:*)",
       "Bash(/Users/jason/Developer/z-ex/ai/tools/ai-shell/.specify/scripts/bash/setup-plan.sh:*)",
       "Bash(/Users/jason/Developer/z-ex/ai/tools/ai-shell/.specify/scripts/bash/update-agent-context.sh:*)",
-      "Bash(git rev-parse:*)"
+      "Bash(git rev-parse:*)",
+      "Bash(npm test:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run start:*)",
+      "Bash(curl:*)",
+      "Bash(node -e:*)"
     ]
   },
   "enabledPlugins": {
