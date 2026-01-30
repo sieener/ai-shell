@@ -34,7 +34,8 @@
       "Bash(npx ts-prune)",
       "Bash(npm run test:*)",
       "Bash(npm run typecheck:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(python3:*)"
     ]
   },
   "enabledPlugins": {
