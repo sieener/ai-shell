@@ -1,4 +1,4 @@
-import { CompletionProvider, CompletionOptions } from './types';
+import { CompletionProvider } from './types';
 import { KnownError } from '../error';
 import i18n from '../i18n';
 import { GeminiProvider } from './gemini';

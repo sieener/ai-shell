@@ -4,8 +4,12 @@ import { cyan, green } from 'kolorist';
 import { generateCompletion, readData } from '../helpers/completion';
 import { getConfig } from '../helpers/config';
 import { streamToIterable } from '../helpers/stream-to-iterable';
-import { ChatCompletionRequestMessage } from 'openai';
 import i18n from '../helpers/i18n';
+
+interface ChatMessage {
+  role: string;
+  content: string;
+}
 
 export default command(
   {
@@ -21,7 +25,7 @@ export default command(
       OPENAI_API_ENDPOINT: apiEndpoint,
       MODEL: model,
     } = await getConfig();
-    const chatHistory: ChatCompletionRequestMessage[] = [];
+    const chatHistory: ChatMessage[] = [];
 
     console.log('');
     intro(i18n.t('Starting new conversation'));
@@ -73,13 +77,11 @@ export default command(
 
 async function getResponse({
   prompt,
-  number = 1,
   key,
   model,
   apiEndpoint,
 }: {
-  prompt: string | ChatCompletionRequestMessage[];
-  number?: number;
+  prompt: string | ChatMessage[];
   model?: string;
   key: string;
   apiEndpoint: string;
@@ -88,7 +90,6 @@ async function getResponse({
     prompt,
     key,
     model,
-    number,
     apiEndpoint,
   });
 

@@ -1,22 +1,12 @@
-import {
-  ChatCompletionRequestMessage,
-  Model,
-} from 'openai';
 import dedent from 'dedent';
 import { IncomingMessage } from 'http';
 import { KnownError } from './error';
 import { streamToIterable } from './stream-to-iterable';
 import { detectShell } from './os-detect';
-import type { AxiosError } from 'axios';
-import { streamToString } from './stream-to-string';
-import './replace-all-polyfill';
 import i18n from './i18n';
 import { stripRegexPatterns } from './strip-regex-patterns';
-import readline from 'readline';
 import { createProvider } from './providers/index';
 import { getConfig } from './config';
-
-const explainInSecondRequest = true;
 
 // Openai outputs markdown format for code blocks. It oftne uses
 // a github style like: "```bash"
@@ -36,7 +26,6 @@ export async function getScriptAndInfo({
   const fullPrompt = getFullPrompt(prompt);
   const stream = await generateCompletion({
     prompt: fullPrompt,
-    number: 1,
     key,
     model,
     apiEndpoint,
@@ -50,13 +39,11 @@ export async function getScriptAndInfo({
 
 export async function generateCompletion({
   prompt,
-  number = 1,
   key,
   model,
   apiEndpoint,
 }: {
-  prompt: string | ChatCompletionRequestMessage[];
-  number?: number;
+  prompt: string | Array<{ role: string; content: string }>;
   model?: string;
   key: string;
   apiEndpoint: string;
@@ -95,12 +82,7 @@ export async function generateCompletion({
     }
   }
 
-  // Convert ChatCompletionRequestMessage[] to string if necessary
-  // Our new interface takes a string prompt.
-  // OpenAI chat completion takes messages.
-  // If prompt is array, we convert to text for non-chat providers or let the provider handle it?
-  // The interface `generateCompletion(prompt: string, ...)` expects string.
-  
+  // Convert message array to string for provider interface
   let promptText = '';
   if (Array.isArray(prompt)) {
     promptText = prompt.map(m => `${m.role}: ${m.content}`).join('\n');
@@ -128,11 +110,6 @@ export async function generateCompletion({
       throw error;
     }
 
-    // Re-throw other errors for now, or adapt the specific OpenAI error handling below if generic enough
-    // The original code had specific handling for OpenAI 429 and response parsing.
-    // We should probably move that logic INTO the OpenAI provider implementation
-    // and just re-throw here.
-    
     throw error;
   }
 }
@@ -152,7 +129,6 @@ export async function getExplanation({
   const stream = await generateCompletion({
     prompt,
     key,
-    number: 1,
     model,
     apiEndpoint,
   });
@@ -177,7 +153,6 @@ export async function getRevision({
   const stream = await generateCompletion({
     prompt: fullPrompt,
     key,
-    number: 1,
     model,
     apiEndpoint,
   });
@@ -202,10 +177,6 @@ export const readData =
 
       const [excludedPrefix] = excluded;
       const stopTextStreamKeys = ['q', 'escape']; //Group of keys that stop the text stream
-
-      const rl = readline.createInterface({
-        input: process.stdin,
-      });
 
       process.stdin.setRawMode(true);
 
@@ -333,8 +304,6 @@ function getFullPrompt(prompt: string) {
 
     ${generationDetails}
 
-    ${explainInSecondRequest ? '' : explainScript}
-
     The prompt is: ${prompt}
   `;
 }
@@ -351,12 +320,3 @@ function getRevisionPrompt(prompt: string, code: string) {
   `;
 }
 
-export async function getModels(
-  key: string,
-  apiEndpoint: string
-): Promise<Model[]> {
-  const openAi = getOpenAi(key, apiEndpoint);
-  const response = await openAi.listModels();
-
-  return response.data.data.filter((model) => model.object === 'model');
-}

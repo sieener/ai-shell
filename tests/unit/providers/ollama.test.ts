@@ -12,24 +12,6 @@ import {
 
 vi.mock('axios');
 
-// Helper to create a proper axios error that passes axios.isAxiosError()
-function createProperAxiosError(
-  code: string,
-  message: string,
-  response?: { status: number }
-): Error & { code: string; isAxiosError: boolean; response?: { status: number } } {
-  const error = new Error(message) as Error & {
-    code: string;
-    isAxiosError: boolean;
-    response?: { status: number };
-  };
-  error.code = code;
-  error.isAxiosError = true;
-  if (response) {
-    error.response = response;
-  }
-  return error;
-}
 
 describe('OllamaProvider', () => {
   let provider: OllamaProvider;

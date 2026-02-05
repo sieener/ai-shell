@@ -2,14 +2,11 @@ import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
 import ini from 'ini';
-import type { TiktokenModel } from '@dqbd/tiktoken';
 import { commandName } from './constants';
 import { KnownError, handleCliError } from './error';
 import * as p from '@clack/prompts';
 import { red } from 'kolorist';
 import i18n from './i18n';
-import { getModels } from './completion';
-import { Model } from 'openai';
 
 const { hasOwnProperty } = Object.prototype;
 export const hasOwn = (object: unknown, key: PropertyKey) =>
@@ -49,7 +46,7 @@ const configParsers = {
       return 'gpt-4o-mini';
     }
 
-    return model as TiktokenModel;
+    return model;
   },
   SILENT_MODE(mode?: string) {
     return String(mode).toLowerCase() === 'true';
@@ -270,16 +267,10 @@ export const showConfigUI = async () => {
       if (p.isCancel(silentMode)) return;
       await setConfigs([['SILENT_MODE', silentMode ? 'true' : 'false']]);
     } else if (choice === 'MODEL') {
-      const { OPENAI_KEY: key, OPENAI_API_ENDPOINT: apiEndpoint } =
-        await getConfig();
-      const models = await getModels(key, apiEndpoint);
-      const model = (await p.select({
-        message: 'Pick a model.',
-        options: models.map((m: Model) => {
-          return { value: m.id, label: m.id };
-        }),
-      })) as string;
-
+      const model = await p.text({
+        message: i18n.t('Enter model name'),
+        placeholder: 'gpt-4o-mini',
+      });
       if (p.isCancel(model)) return;
       await setConfigs([['MODEL', model]]);
     } else if (choice === 'LANGUAGE') {

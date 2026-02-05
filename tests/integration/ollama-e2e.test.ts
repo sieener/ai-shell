@@ -7,28 +7,10 @@ import {
   loadErrorFixtures,
   loadStreamingChunks,
   createMockStream,
+  createAxiosError,
 } from '../fixtures/ollama/loader';
 
 vi.mock('axios');
-
-// Helper to create a proper axios error that passes axios.isAxiosError()
-function createProperAxiosError(
-  code: string,
-  message: string,
-  response?: { status: number }
-): Error & { code: string; isAxiosError: boolean; response?: { status: number } } {
-  const error = new Error(message) as Error & {
-    code: string;
-    isAxiosError: boolean;
-    response?: { status: number };
-  };
-  error.code = code;
-  error.isAxiosError = true;
-  if (response) {
-    error.response = response;
-  }
-  return error;
-}
 
 describe('Ollama E2E Integration Tests', () => {
   let provider: OllamaProvider;
@@ -131,7 +113,7 @@ describe('Ollama E2E Integration Tests', () => {
         data: { models: [{ name: 'test-model' }] },
       });
 
-      const axiosError = createProperAxiosError(connError.error.code, connError.error.message);
+      const axiosError = createAxiosError(connError.error.code, connError.error.message);
       vi.mocked(axios.post).mockRejectedValue(axiosError);
 
       await expect(
@@ -150,7 +132,7 @@ describe('Ollama E2E Integration Tests', () => {
         data: { models: [{ name: 'test-model' }] },
       });
 
-      const axiosError = createProperAxiosError(timeoutError.error.code, timeoutError.error.message);
+      const axiosError = createAxiosError(timeoutError.error.code, timeoutError.error.message);
       vi.mocked(axios.post).mockRejectedValue(axiosError);
 
       await expect(

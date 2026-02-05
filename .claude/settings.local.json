@@ -35,7 +35,20 @@
       "Bash(npm run test:*)",
       "Bash(npm run typecheck:*)",
       "Bash(git stash:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(npx ts-prune:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vitest run)",
+      "Bash(npx knip)",
+      "Bash(npm ls:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell status --short)",
+      "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell diff --stat HEAD)",
+      "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell diff HEAD -- src/helpers/replace-all-polyfill.ts)",
+      "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell diff HEAD -- src/commands/chat.ts)",
+      "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell diff HEAD -- src/helpers/config.ts)",
+      "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell diff HEAD -- src/helpers/completion.ts)",
+      "Bash(git add:*)"
     ]
   },
   "enabledPlugins": {
