@@ -116,9 +116,9 @@ export async function prompt({
   spin.start(i18n.t(`Loading...`));
   const { readInfo, readScript } = await getScriptAndInfo({
     prompt: thePrompt,
-    key,
-    model,
-    apiEndpoint,
+    key: key!,
+    model: model!,
+    apiEndpoint: apiEndpoint!,
   });
   spin.stop(`${i18n.t('Your script')}:`);
   console.log('');
@@ -132,9 +132,9 @@ export async function prompt({
     if (!info) {
       const { readExplanation } = await getExplanation({
         script,
-        key,
-        model,
-        apiEndpoint,
+        key: key!,
+        model: model!,
+        apiEndpoint: apiEndpoint!,
       });
       spin.stop(`${i18n.t('Explanation')}:`);
       console.log('');
@@ -145,7 +145,7 @@ export async function prompt({
     }
   }
 
-  await runOrReviseFlow(script, key, model, apiEndpoint, silentMode);
+  await runOrReviseFlow(script, key!, model!, apiEndpoint!, silentMode);
 }
 
 async function runOrReviseFlow(
@@ -260,5 +260,5 @@ async function revisionFlow(
     console.log(dim('•'));
   }
 
-  await runOrReviseFlow(script, key, model, apiEndpoint, silentMode);
+  await runOrReviseFlow(script, key!, model!, apiEndpoint!, silentMode);
 }

@@ -25,8 +25,7 @@
     "dist"
   ],
   "bin": {
-    "ai-shell": "./dist/cli.mjs",
-    "ai": "./dist/cli.mjs"
+    "lan2cli": "./dist/cli.mjs"
   },
   "scripts": {
     "start": "jiti ./src/cli.ts",

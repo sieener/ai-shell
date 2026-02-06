@@ -48,7 +48,17 @@
       "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell diff HEAD -- src/commands/chat.ts)",
       "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell diff HEAD -- src/helpers/config.ts)",
       "Bash(git -C /Users/jason/Developer/z-ex/ai/tools/ai-shell diff HEAD -- src/helpers/completion.ts)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nrefactor\\(providers\\): remove OpenAI-specific dependencies and generalize provider interface\n\n- Remove @dqbd/tiktoken dependency from package.json\n- Replace OpenAI-specific types with generic ChatMessage interface\n- Simplify completion module by removing OpenAI-specific logic\n- Remove unused utilities \\(replace-all-polyfill, stream-to-string\\)\n- Consolidate test helpers \\(createAxiosError\\) into fixtures\n- Update CLAUDE.md with comprehensive project documentation\n- Simplify MODEL config to accept text input instead of API list\n\nThis refactoring makes the codebase more provider-agnostic and removes\nunnecessary dependencies while maintaining all existing functionality.\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm link:*)",
+      "Bash(lan2cli --version:*)",
+      "Bash(lan2cli --help:*)",
+      "Bash(npm unlink:*)",
+      "Bash(timeout 30 bash -c 'echo -e \"\"cancel\\\\n\"\" | lan2cli \"\"list all typescript files\"\"')",
+      "Bash(lan2cli config:*)",
+      "Bash(pgrep:*)"
     ]
   },
   "enabledPlugins": {

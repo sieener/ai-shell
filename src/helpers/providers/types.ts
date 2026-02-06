@@ -16,7 +16,7 @@ export interface CompletionProvider {
   generateCompletion(
     prompt: string,
     options: CompletionOptions
-  ): Promise<IncomingMessage | ReadableStream>;
+  ): Promise<IncomingMessage>;
 
   /**
    * Checks if the provider is configured correctly.

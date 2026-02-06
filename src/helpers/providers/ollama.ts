@@ -68,7 +68,7 @@ export class OllamaProvider implements CompletionProvider {
   async generateCompletion(
     prompt: string,
     options: CompletionOptions
-  ): Promise<IncomingMessage | ReadableStream> {
+  ): Promise<IncomingMessage> {
     const host = options.endpoint || DEFAULT_HOST;
     const model = options.model || DEFAULT_MODEL;
 

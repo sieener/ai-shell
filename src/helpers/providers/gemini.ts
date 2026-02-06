@@ -18,7 +18,7 @@ export class GeminiProvider implements CompletionProvider {
   async generateCompletion(
     prompt: string,
     options: CompletionOptions
-  ): Promise<IncomingMessage | ReadableStream> {
+  ): Promise<IncomingMessage> {
     this.validateConfig(options);
 
     const genAI = new GoogleGenerativeAI(options.apiKey!);

@@ -52,9 +52,9 @@ export default command(
       });
       const { readResponse } = await getResponse({
         prompt: chatHistory,
-        key,
+        key: key!,
         model,
-        apiEndpoint,
+        apiEndpoint: apiEndpoint!,
       });
 
       infoSpin.stop(`${green('AI Shell:')}`);

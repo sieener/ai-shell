@@ -1,5 +1,6 @@
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 import { IncomingMessage } from 'http';
+import { Readable } from 'stream';
 import { CompletionOptions, CompletionProvider } from './types';
 import { KnownError } from '../error';
 import { commandName } from '../constants';
@@ -18,27 +19,22 @@ export class OpenAIProvider implements CompletionProvider {
   async generateCompletion(
     prompt: string,
     options: CompletionOptions
-  ): Promise<IncomingMessage | ReadableStream> {
+  ): Promise<IncomingMessage> {
     this.validateConfig(options);
 
-    const configuration = new Configuration({
+    const openai = new OpenAI({
       apiKey: options.apiKey,
-      basePath: options.endpoint,
+      baseURL: options.endpoint,
     });
-    const openAi = new OpenAIApi(configuration);
 
     try {
-      const completion = await openAi.createChatCompletion(
-        {
-          model: options.model || 'gpt-4o-mini',
-          messages: [{ role: 'user', content: prompt }],
-          n: 1,
-          stream: true,
-        },
-        { responseType: 'stream' }
-      );
+      const completion = await openai.chat.completions.create({
+        model: options.model || 'gpt-4o-mini',
+        messages: [{ role: 'user', content: prompt }],
+        stream: true,
+      });
 
-      return completion.data as unknown as IncomingMessage;
+      return this.convertStreamToSSE(completion);
     } catch (err: any) {
         const error = err;
 
@@ -79,5 +75,33 @@ export class OpenAIProvider implements CompletionProvider {
         
         throw error;
     }
+  }
+
+  /**
+   * Convert OpenAI stream to IncomingMessage format for compatibility
+   */
+  private convertStreamToSSE(stream: AsyncIterable<OpenAI.Chat.Completions.ChatCompletionChunk>): IncomingMessage {
+    let started = false;
+
+    const readable = new Readable({
+      async read() {
+        if (started) return;
+        started = true;
+
+        try {
+          for await (const chunk of stream) {
+            const delta = chunk.choices[0]?.delta?.content;
+            if (delta) {
+              this.push(`data: ${JSON.stringify({ choices: [{ delta: { content: delta } }] })}\n\n`);
+            }
+          }
+          this.push(null);
+        } catch (error) {
+          this.destroy(error as Error);
+        }
+      },
+    });
+
+    return readable as unknown as IncomingMessage;
   }
 }

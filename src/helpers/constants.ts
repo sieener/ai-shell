@@ -1,2 +1,2 @@
-export const commandName = 'ai';
-export const projectName = 'AI Shell';
+export const commandName = 'lan2cli';
+export const projectName = 'lan2cli';
